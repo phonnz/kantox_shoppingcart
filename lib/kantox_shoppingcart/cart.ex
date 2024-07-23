@@ -49,13 +49,25 @@ defmodule KantoxShoppingcart.Cart do
   defp decrement(value), do: 0
 
   defp set_amount(cart) do
-    Map.put(cart, :amount, compute_total(cart.products))
+    cart
+    |> Map.put(:amount, compute_total(cart.products))
+    |> set_string_amount
+  end
+
+  defp set_string_amount(%__MODULE__{} = cart) do
+    string =
+      cart
+      |> Map.get(:amount)
+      |> Money.to_string()
+
+    Map.put(cart, :total, string)
   end
 
   defp compute_total(products) do
     products
     |> Enum.map(&compute_single_product_amount/1)
     |> Enum.reduce(0, &(&2 + &1))
+    |> Money.new()
   end
 
   defp compute_single_product_amount({product_key, quantity}) do
