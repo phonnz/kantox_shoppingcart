@@ -27,9 +27,26 @@ defmodule KantoxShoppingcart.Cart do
     |> set_amount()
   end
 
-  def add(%{:products => products} = cart, product_code) do
-    Map.put(cart, :products, Map.update(products, product_code, 1, &(&1 + 1)))
+  def add(%__MODULE__{:products => products} = cart, product_code, quantity \\ 1) do
+    Map.put(cart, :products, Map.update(products, product_code, 1, &(&1 + quantity)))
   end
+
+  def substract(%__MODULE__{:products => products} = cart, product_code, quantity \\ 1) do
+    Map.put(cart, :products, remove(products, product_code, quantity))
+  end
+
+  defp remove(products, product_to_decrement, quantity) do
+    Map.put(
+      products,
+      product_to_decrement,
+      products
+      |> Map.get(product_to_decrement)
+      |> decrement()
+    )
+  end
+
+  defp decrement(value) when value > 0, do: value - 1
+  defp decrement(value), do: 0
 
   defp set_amount(cart) do
     Map.put(cart, :amount, compute_total(cart.products))
