@@ -17,6 +17,7 @@ defmodule KantoxShoppingcartWeb.Router do
   scope "/", KantoxShoppingcartWeb do
     pipe_through :browser
 
+    live "/", CartLive
     get "/", PageController, :home
   end
 
