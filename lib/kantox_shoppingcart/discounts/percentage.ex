@@ -1,12 +1,12 @@
-defmodule KantoxShoppingCart.Discounts.Percentage do
+defmodule KantoxShoppingcart.Discounts.Percentage do
   @behaviour KantoxShoppingCart.Discount.Discount
 
   @at_least_items 3
   @discount_percentage 10
 
   @impl true
-  def maybe_discount(%{:quantity => quantity} = cart_item) when quantity > @at_least_items do
-    Map.put(cart_item, :subtotal, apply_discount(quantity, cart_item.price))
+  def maybe_discount(%{:quantity => quantity} = cart_item) when quantity >= @at_least_items do
+    Map.put(cart_item, :subtotal, round(apply_discount(quantity, cart_item.price)))
   end
 
   @impl true

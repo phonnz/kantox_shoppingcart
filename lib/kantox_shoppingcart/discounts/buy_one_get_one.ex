@@ -1,9 +1,9 @@
-defmodule KantoxShoppingCart.Discounts.BuyOneGetOne do
+defmodule KantoxShoppingcart.Discounts.BuyOneGetOne do
   @behaviour KantoxShoppingCart.Discounts.Discount
   @at_least 2
 
   @impl true
-  def maybe_discount(%{:quantity => quantity} = cart_item) when quantity > @at_least do
+  def maybe_discount(%{:quantity => quantity} = cart_item) when quantity >= @at_least do
     Map.put(cart_item, :subtotal, apply_discount(quantity, cart_item.price))
   end
 
@@ -13,7 +13,7 @@ defmodule KantoxShoppingCart.Discounts.BuyOneGetOne do
   end
 
   def apply_discount(quantity, price) do
-    quantity_to_charge = quantity - div(quantity, @every)
+    quantity_to_charge = quantity - div(quantity, @at_least)
     net_subtotal(quantity_to_charge, price)
   end
 

@@ -1,10 +1,10 @@
-defmodule KantoxShoppingCart.Discounts.TwoThirds do
+defmodule KantoxShoppingcart.Discounts.TwoThirds do
   @behaviour KantoxShoppingCart.Discounts.Discount
   @at_least 3
 
   @impl true
-  def maybe_discount(%{:quantity => quantity} = cart_item) when quantity > @at_least do
-    Map.put(cart_item, :subtotal, apply_discount(quantity, cart_item.price))
+  def maybe_discount(%{:quantity => quantity} = cart_item) when quantity >= @at_least do
+    Map.put(cart_item, :subtotal, round(apply_discount(quantity, cart_item.price)))
   end
 
   @impl true
@@ -13,7 +13,9 @@ defmodule KantoxShoppingCart.Discounts.TwoThirds do
   end
 
   def apply_discount(quantity, price) do
-    net_subtotal(quantity, price) * 2 / 3
+    net_subtotal(quantity, price)
+    |> Kernel.*(2)
+    |> Kernel./(3)
   end
 
   def net_subtotal(quantity, price) do

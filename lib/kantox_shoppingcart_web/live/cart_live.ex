@@ -1,14 +1,17 @@
 defmodule KantoxShoppingcartWeb.CartLive do
   use Phoenix.LiveView
+  alias KantoxShoppingcart.Cart
 
+  @provitional_store %{
+    "GR1" => %{:name => "Green tea", :price => 311, :discount => BuyOneGetOne},
+    "SR1" => %{:name => "Strawberries", :price => 500, :discount => Percentage},
+    "CF1" => %{:name => "Coffee", :price => 1123, :discount => TwoThirds}
+  }
   @impl true
   def mount(params, _, socket) do
     ticket = %{
-      :total => "$10.29",
-      :products => [
-        %{id: 4, name: "product-1", quantity: 2, price: 200},
-        %{id: 5, name: "product-2", quantity: 1, price: 300}
-      ]
+      :total => "0.0",
+      :products => @provisional_store
     }
 
     {:ok, assign(socket, :products, ticket.products) |> assign(:total, ticket.total)}
